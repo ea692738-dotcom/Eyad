@@ -10,8 +10,12 @@ const $ = s => document.querySelector(s);
 function save(){localStorage.setItem("neoLearnState",JSON.stringify(state)); updateProgress();}
 function updateProgress(){
  const n=state.done.length, p=Math.round(n/weeks.length*100);
- ["progressTop","percentHome"].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=p+"%"});
+ ["progressTop","percentHome","progressBig"].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=p+"%"});
  const d=$("#doneCount"); if(d)d.textContent=n;
+ const pw=$("#progressWeeks"); if(pw)pw.textContent=n+" / "+weeks.length;
+ const pr=$("#progressRemaining"); if(pr)pr.textContent=weeks.length-n;
+ const pb=$("#progressBar"); if(pb)pb.style.width=p+"%";
+ const ring=$("#progressRing"); if(ring)ring.style.background=`conic-gradient(var(--purple) ${p*3.6}deg,#241a30 ${p*3.6}deg)`;
 }
 function card(w){
  const done=state.done.includes(w.id);
@@ -43,6 +47,7 @@ function showView(name){
  const v=$("#"+name); if(v)v.classList.add("active");
  document.querySelectorAll(".nav-item").forEach(x=>x.classList.toggle("active",x.dataset.view===name));
  if(name==="home"||name==="weeks"){renderCards();}
+ if(name==="progress"){updateProgress();}
  if(name==="projects")renderProjects();
  if(name==="achievements")renderAchievements();
 }
